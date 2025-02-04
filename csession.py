@@ -11,14 +11,17 @@ session_dir = "SESSÕES"
 os.makedirs(session_dir, exist_ok=True)
 
 for i in range(1, quantidade + 1):
-    session_name = f"{session_dir}/session_{i}"
-    print(f"\n🔹 Criando sessão {i}...")
+    phone = input(f"\n📱 Insira o nome da session {i}: ").strip()
+    session_name = os.path.join(session_dir, phone)  # Nome da sessão = Número de telefone
+
+    print(f"\n🔹 Criando sessão para {phone}...")
 
     client = TelegramClient(session_name, api_id, api_hash)
 
     async def main():
-        await client.start()
-        print(f"✅ Sessão {i} criada com sucesso para o número: {await client.get_me()}")
+        await client.start(phone)
+        me = await client.get_me()
+        print(f"✅ Sessão criada com sucesso para: {me.phone}")
 
     with client:
         client.loop.run_until_complete(main())
